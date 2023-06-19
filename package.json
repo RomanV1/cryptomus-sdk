@@ -1,26 +1,29 @@
 {
     "name": "cryptomus-sdk",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "This is not an official one created for simplified work with Cryptomus API",
     "author": "Roman Volzhin <volzhin1@gmail.com>",
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
     "files": [
-        "dist/"
+        "dist/lib"
     ],
     "scripts": {
-        "build": "tsc"
+        "prepublish": "npm run build",
+        "build": "tsc",
+        "test:e2e": "jest"
     },
     "license": "MIT",
     "homepage": "https://github.com/RomanV1/cryptomus-sdk",
     "repository": {
         "type": "git",
-        "url": "https://github.com/RomanV1/cryptomus-sdk.git"
+        "url": "git+https://github.com/RomanV1/cryptomus-sdk.git"
     },
     "bugs": {
         "url": "https://github.com/RomanV1/cryptomus-sdk/issues"
     },
     "keywords": [
+        "cryptomus sdk",
         "cryptomus",
         "crypto",
         "payment",
