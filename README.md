@@ -19,16 +19,28 @@ const Cryptomus = require("cryptomus-sdk");
 // Using ES6 imports
 import { Cryptomus } from "cryptomus-sdk";
 ```
+## Initialization
+
+**[Getting API keys](https://doc.cryptomus.com/getting-started/getting-api-keys)**
+
+```javascript
+const MERCHANT_KEY = "123123";
+const PAYMENT_KEY = "asdasd";
+const PAYOUT_KEY = "qwerty";
+    
+const cryptomus = new Cryptomus(MERCHANT_KEY, PAYMENT_KEY, PAYOUT_KEY);
+```
+
+
 ## Creating an invoice
 
 **Send Request**
-```javascript
-const cryptomus = new Cryptomus(MERCHANT_KEY, PAYMENT_KEY, PAYOUT_KEY); 
 
+```javascript
 const paymentForm = await cryptomus.createPayment({
     amount: "10",
     currency: "USDT",
-    order_id: cryptomus.createUUID()
+    order_id: cryptomus.generateUUID()
 });
 ```
 
@@ -72,7 +84,7 @@ const paymentForm = await cryptomus.createPayment({
 
 **Send Request**
 ```javascript
-const checkPayment = await cryptomus.checkPayment({
+const checkPayment = await cryptomus.getPaymentInfo({
     // To get the account status, you need to pass one of the required parameters, 
     // if you pass both, the account will be identified using the order_id
     uuid: "1234567890",
@@ -110,7 +122,7 @@ const checkPayment = await cryptomus.checkPayment({
 
 **Send Request** 
 ```javascript
-const paymentList = await cryptomus.paymentList({
+const paymentList = await cryptomus.getPaymentHistory({
     date_from: "2023-05-16 00:00:00",
     date_to: "2023-05-16 23:59:59"
 });
@@ -159,7 +171,7 @@ const paymentList = await cryptomus.paymentList({
 
 **Send Request**
 ```javascript
-const paymentServices = await cryptomus.paymentServices();
+const paymentServices = await cryptomus.getPaymentServices();
 ```
 
 **Response**
@@ -213,15 +225,15 @@ const refund = await cryptomus.refund({
 **Response**
 ```json
 {
-  "state": 0
+    "state": 0
 }
 ```
 
 **Response example with error**
 ```json
 {
-"state": 1,
-"message": "Payment was not found"
+    "state": 1,
+    "message": "Payment was not found"
 }
 ```
 
@@ -229,7 +241,7 @@ const refund = await cryptomus.refund({
 
 **Send Request**
 ```javascript
-const balance = await cryptomus.balance();
+const balance = await cryptomus.getBalance();
 ```
 
 **Response**
@@ -283,15 +295,15 @@ const resend = await cryptomus.resendWebhook({
 **Response**
 ```json
 {
-  "state": 0
+    "state": 0
 }
 ```
 
 **Response example with error**
 ```json
 {
-"state": 1,
-"message": "Payment was not found"
+    "state": 1,
+    "message": "Payment was not found"
 }
 ```
 
@@ -302,7 +314,7 @@ const resend = await cryptomus.resendWebhook({
 const wallet = await cryptomus.createWallet({
     network: "tron",
     currency: "USDT",
-    order_id: cryptomus.createShortUUID(), // Use only short UUID for a wallet methods
+    order_id: cryptomus.generateShortUUID(), // Use only short UUID for a wallet methods
     url_callback: "https://your.site/callback"
 });
 ```
@@ -325,7 +337,7 @@ const wallet = await cryptomus.createWallet({
 
 **Send Request**
 ```javascript
-const wallet = await cryptomus.createWallet({
+const wallet = await cryptomus.blockWallet({
     // You need to pass one of the required parameters, if you pass both, the account will be identified by order_id
     uuid: "1234567890",
     order_id: "0987654321"
@@ -351,7 +363,7 @@ const wallet = await cryptomus.createPayout({
     amount: "5",
     currency: "USDT",
     network: "TRON",
-    order_id: cryptomus.createShortUUID(), // Use only short UUID for a payout methods
+    order_id: cryptomus.generateShortUUID(), // Use only short UUID for a payout methods
     address: "TDD97yguPESTpcrJMqU6h2ozZbibv4Vaqm",
     is_subtract: true
 });
@@ -381,7 +393,7 @@ const wallet = await cryptomus.createPayout({
 
 **Send Request**
 ```javascript
-const wallet = await cryptomus.checkPayout({
+const wallet = await cryptomus.getPayoutInfo({
     // One of the mandatory parameters must be passed in order to receive the payout status, if you pass both, the payout will be identified by order_id
     uuid: "1234567890",
     order_id: "0987654321"
@@ -410,7 +422,7 @@ const wallet = await cryptomus.checkPayout({
 
 **Send Request**
 ```javascript
-const wallet = await cryptomus.payoutList();
+const payoutList = await cryptomus.getPayoutHistory();
 ```
 
 **Response**
@@ -448,7 +460,7 @@ const wallet = await cryptomus.payoutList();
 
 **Send Request**
 ```javascript
-const services = await cryptomus.payoutServices();
+const services = await cryptomus.getPayoutServices();
 ```
 
 **Response**
@@ -525,10 +537,10 @@ const transferToWallet = await cryptomus.transferToWallet("personal", {
 ## Create UUID
 **You can use these methods on your `order_id`**
 ```javascript
-const order_id = cryptomus.createUUID(); // example: a7c0caec-a594-4aaa-b1c4-77d511857594
+const order_id = cryptomus.generateUUID(); // example: a7c0caec-a594-4aaa-b1c4-77d511857594
 
 // You need short UUID, when you use wallet methods or payout methods
-const order_id = cryptomus.createShortUUID(); // example: mhvXdrZT4jP5T8vBxuvm75
+const order_id = cryptomus.generateShortUUID(); // example: mhvXdrZT4jP5T8vBxuvm75
 ```
 
 
