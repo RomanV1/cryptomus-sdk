@@ -10,7 +10,7 @@ describe('Cryptomus SDK tests', () => {
     describe('Payment', () => {
         const currency = 'USD';
         const amount = '1';
-        const orderId = cryptomus.createUUID();
+        const orderId = cryptomus.generateUUID();
         let uuid;
 
         it('should return payment form', async () => {
@@ -30,7 +30,7 @@ describe('Cryptomus SDK tests', () => {
         });
 
         it('should return payment info by order_id', async () => {
-            const status = await cryptomus.checkPayment({ order_id: orderId });
+            const status = await cryptomus.getPaymentInfo({ order_id: orderId });
 
             expect(status.state).toBeFalsy();
             expect(status.result.amount).toBe(`${amount}.00`);
@@ -40,7 +40,7 @@ describe('Cryptomus SDK tests', () => {
         });
 
         it('should return payment info by UUID', async () => {
-            const status = await cryptomus.checkPayment({ uuid: uuid });
+            const status = await cryptomus.getPaymentInfo({ uuid: uuid });
 
             expect(status.state).toBeFalsy();
             expect(status.result.amount).toBe(`${amount}.00`);
@@ -50,7 +50,7 @@ describe('Cryptomus SDK tests', () => {
         });
 
         it('should return available payment services', async () => {
-            const paymentServices = await cryptomus.paymentServices();
+            const paymentServices = await cryptomus.getPaymentServices();
 
             expect(paymentServices.state).toBeFalsy();
             expect(paymentServices.result.length).toBeGreaterThan(0);
@@ -69,14 +69,14 @@ describe('Cryptomus SDK tests', () => {
         });
 
         it('should return payment list', async () => {
-            const paymentList = await cryptomus.paymentList();
+            const paymentList = await cryptomus.getPaymentHistory();
 
             expect(paymentList.state).toBeFalsy();
             expect(paymentList.result.items.length).toBeGreaterThan(0);
         });
 
         it('should return balance', async () => {
-            const balance = await cryptomus.balance();
+            const balance = await cryptomus.getBalance();
 
             expect(balance.state).toBeFalsy();
             expect(balance.result.length).toBeGreaterThan(0);
@@ -92,7 +92,7 @@ describe('Cryptomus SDK tests', () => {
     });
 
     describe('Wallet', () => {
-        const orderId = cryptomus.createShortUUID();
+        const orderId = cryptomus.generateShortUUID();
         const network = 'tron';
         const currency = 'USDT';
         let uuid;
@@ -123,7 +123,7 @@ describe('Cryptomus SDK tests', () => {
             const { result } = await cryptomus.createWallet({
                 currency: currency,
                 network: network,
-                order_id: cryptomus.createShortUUID(),
+                order_id: cryptomus.generateShortUUID(),
             });
 
             const blockedWallet = await cryptomus.blockWallet({ uuid: result.uuid });
@@ -143,7 +143,7 @@ describe('Cryptomus SDK tests', () => {
                     currency: 'USDT',
                     is_subtract: false,
                     network: 'tron',
-                    order_id: cryptomus.createUUID(),
+                    order_id: cryptomus.generateUUID(),
                 });
             } catch (err) {
                 expect(err.response.data).toEqual({ message: 'Minimum amount 1.00000000 USDT', state: 1 });
@@ -152,8 +152,8 @@ describe('Cryptomus SDK tests', () => {
 
         it('should return payout info error', async () => {
             try {
-                await cryptomus.checkPayout({
-                    order_id: cryptomus.createShortUUID(),
+                await cryptomus.getPayoutInfo({
+                    order_id: cryptomus.generateShortUUID(),
                 });
             } catch (err) {
                 expect(err.response.data).toEqual({
@@ -164,14 +164,14 @@ describe('Cryptomus SDK tests', () => {
         });
 
         it('should return payout services', async () => {
-            const payoutServices = await cryptomus.payoutServices();
+            const payoutServices = await cryptomus.getPayoutServices();
 
             expect(payoutServices.state).toBeFalsy();
             expect(payoutServices.result.length).toBeGreaterThan(0);
         });
 
         it('should return payout list', async () => {
-            const payoutServices = await cryptomus.payoutList();
+            const payoutServices = await cryptomus.getPayoutHistory();
 
             expect(payoutServices.state).toBeFalsy();
         });
