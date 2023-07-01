@@ -1,6 +1,6 @@
 {
     "name": "cryptomus-sdk",
-    "version": "1.1.1",
+    "version": "2.0.0",
     "description": "This is not an official one created for simplified work with Cryptomus API",
     "author": "Roman Volzhin <volzhin1@gmail.com>",
     "main": "dist/lib/index.js",
